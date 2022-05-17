@@ -41,7 +41,7 @@ namespace todoAPI.Controllers
             {
                 Title = todo.Title,
                 IsDone = todo.IsDone
-            } );
+            });
             
             _unitOfWork.Commit();
             return Ok();
@@ -50,6 +50,9 @@ namespace todoAPI.Controllers
         [HttpDelete]
         public IActionResult DeleteTodo( int todoId )
         {
+            Todo? todo = _todoRepository.GetTodoById(todoId);
+            if (todo == null)
+                return BadRequest($"Todo with Id: {todoId} is not found");
             _todoRepository.DeleteTodoById( todoId );
             _unitOfWork.Commit();
             return Ok();
@@ -58,6 +61,9 @@ namespace todoAPI.Controllers
         [HttpPut]
         public IActionResult CompleteTodo( int todoId)
         {
+            Todo? todo = _todoRepository.GetTodoById(todoId);
+            if (todo == null)
+                return BadRequest($"Todo with Id: {todoId} is not found");
             _todoRepository.CompleteTodo( todoId );
             _unitOfWork.Commit();
             return Ok();
